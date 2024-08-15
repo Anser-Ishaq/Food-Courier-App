@@ -6,10 +6,12 @@ class Header extends StatelessWidget {
   const Header({
     super.key,
     required this.onTap,
+    required this.address,
     required this.onTapLocation,
   });
 
   final VoidCallback onTap;
+  final String address;
   final VoidCallback onTapLocation;
 
   @override
@@ -28,23 +30,27 @@ class Header extends StatelessWidget {
           ),
           GestureDetector(
             onTap: onTapLocation,
-            child: const Row(
+            child: Row(
               mainAxisSize: MainAxisSize.min,
               children: [
-                Icon(
+                const Icon(
                   Icons.location_on,
                   color: AppColors.red,
                 ),
-                SizedBox(
+                const SizedBox(
                   width: 3,
                 ),
-                Text(
-                  'Set Location....',
-                  style: TextStyle(
-                    fontFamily: 'Poppins',
-                    fontSize: 12,
-                    fontWeight: FontWeight.w500,
-                    height: 28 / 12,
+                SizedBox(
+                  width: MediaQuery.of(context).size.width * 0.5,
+                  child: Text(
+                    address,
+                    overflow: TextOverflow.ellipsis,
+                    style: const TextStyle(
+                      fontFamily: 'Poppins',
+                      fontSize: 12,
+                      fontWeight: FontWeight.w500,
+                      height: 28 / 12,
+                    ),
                   ),
                 ),
               ],

@@ -12,12 +12,14 @@ class CartScreen extends StatefulWidget {
     super.key,
     required this.index,
     required this.onTapBack,
-    this.foodItems = const [],
+    required this.foodItems,
+    required this.onQuantityChanged,
   });
 
   final int index;
   final void Function(int) onTapBack;
   final List<FoodItem> foodItems;
+  final VoidCallback onQuantityChanged;
 
   @override
   State<CartScreen> createState() => _CartScreenState();
@@ -36,6 +38,7 @@ class _CartScreenState extends State<CartScreen> {
     setState(() {
       _foodItems[index].quantity = newQuantity;
     });
+    widget.onQuantityChanged();
   }
 
   @override
@@ -57,6 +60,7 @@ class _CartScreenState extends State<CartScreen> {
           SafeArea(
             child: Column(
               children: [
+                const SizedBox(height: 10),
                 Container(
                   width: MediaQuery.of(context).size.width,
                   alignment: Alignment.centerLeft,
@@ -100,6 +104,7 @@ class _CartScreenState extends State<CartScreen> {
                             setState(() {
                               _foodItems.removeAt(index);
                             });
+                            widget.onQuantityChanged();
                           },
                           child: FoodItemBox(
                             foodItem: item,
@@ -117,7 +122,10 @@ class _CartScreenState extends State<CartScreen> {
                   deliveryCharges: 20,
                   discount: 10,
                   onTap: () {
-                    Navigator.push(context, MaterialPageRoute(builder: (context) => const FinishOrderScreen()));
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => const FinishOrderScreen()));
                   },
                 ),
               ],

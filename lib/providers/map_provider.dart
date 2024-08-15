@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:convert';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:geocoding/geocoding.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:http/http.dart' as http;
@@ -49,7 +50,7 @@ class MapProvider with ChangeNotifier {
   TextEditingController get locationTextController => _locationTextController;
 
   void initLocationUpdates() {
-    getLocationUpdates(currentButton: false);
+    getLocationUpdates();
     _locationTextController.addListener(() => onChange());
   }
 
@@ -58,13 +59,15 @@ class MapProvider with ChangeNotifier {
     getSuggestions(_locationTextController.text);
   }
 
+  String _buildSuggestionsUrl(String input) {
+    return 'https://maps.googleapis.com/maps/api/place/autocomplete/json?input=$input&key=${dotenv.env['GOOGLE_MAP_API']}&sessiontoken=$_sessionToken';
+  }
+
   Future<void> getSuggestions(String input) async {
     try {
-      String baseURL =
-          'https://maps.googleapis.com/maps/api/place/autocomplete/json';
-      String request =
-          '$baseURL?input=$input&key=YOUR_API_KEY&sessiontoken=$_sessionToken';
-      var response = await http.get(Uri.parse(request));
+      final url = _buildSuggestionsUrl(input);
+      final response = await http.get(Uri.parse(url));
+      if (kDebugMode) print(response.body);
 
       if (response.statusCode == 200) {
         placesList = jsonDecode(response.body.toString())['predictions'];
@@ -76,7 +79,7 @@ class MapProvider with ChangeNotifier {
     }
   }
 
-  Future<void> getLocationUpdates({required bool currentButton}) async {
+  Future<void> getLocationUpdates() async {
     bool serviceEnabled = await _locationController.serviceEnabled();
     if (!serviceEnabled) {
       serviceEnabled = await _locationController.requestService();
@@ -91,6 +94,7 @@ class MapProvider with ChangeNotifier {
     }
 
     final currentLocationData = await _locationController.getLocation();
+    if (kDebugMode) print(currentLocationData);
     if (currentLocationData.latitude != null &&
         currentLocationData.longitude != null) {
       currentLocation =
@@ -98,83 +102,29 @@ class MapProvider with ChangeNotifier {
 
       List<Placemark> placemarks = await placemarkFromCoordinates(
           currentLocationData.latitude!, currentLocationData.longitude!);
-      if (currentButton) {
-        markers = [
-          Marker(
-            markerId: const MarkerId('_currentLocation'),
-            position: currentLocation!,
-            infoWindow: const InfoWindow(
-              title: 'Your Location',
-            ),
+      markers = [
+        Marker(
+          markerId: const MarkerId('_currentLocation'),
+          position: currentLocation!,
+          infoWindow: const InfoWindow(
+            title: 'Your Location',
           ),
-        ];
+        ),
+      ];
 
-        final GoogleMapController controller = await _mapCompleter.future;
-        controller.animateCamera(
-          CameraUpdate.newCameraPosition(
-            CameraPosition(
-              target: currentLocation!,
-              zoom: 14.0,
-            ),
+      final GoogleMapController controller = await _mapCompleter.future;
+      controller.animateCamera(
+        CameraUpdate.newCameraPosition(
+          CameraPosition(
+            target: currentLocation!,
+            zoom: 15.0,
           ),
-        );
-        stAddress =
-            '${placemarks.last.name!}, ${placemarks.last.street!}, ${placemarks.last.locality!}, ${placemarks.last.administrativeArea!}, ${placemarks.last.country!}';
-      } else {
-        stAddress =
-            '${placemarks.last.locality!}, ${placemarks.last.administrativeArea!}, ${placemarks.last.country!}';
-      }
+        ),
+      );
+      stAddress =
+          '${placemarks.last.name!}, ${placemarks.last.street!}, ${placemarks.last.locality!}, ${placemarks.last.administrativeArea!}, ${placemarks.last.country!}';
     }
   }
-
-  // Future<void> userCurrentLocation() async {
-  //   bool serviceEnabled = await _locationController.serviceEnabled();
-  //   if (!serviceEnabled) {
-  //     serviceEnabled = await _locationController.requestService();
-  //     if (!serviceEnabled) return;
-  //   }
-
-  //   location.PermissionStatus permissionGranted =
-  //       await _locationController.hasPermission();
-  //   if (permissionGranted == location.PermissionStatus.denied) {
-  //     permissionGranted = await _locationController.requestPermission();
-  //     if (permissionGranted != location.PermissionStatus.granted) return;
-  //   }
-
-  //   final currentLocationData = await _locationController.getLocation();
-
-  //   if (currentLocationData.latitude != null &&
-  //       currentLocationData.longitude != null) {
-  //     currentLocation =
-  //         LatLng(currentLocationData.latitude!, currentLocationData.longitude!);
-  //     markers = [
-  //       Marker(
-  //         markerId: const MarkerId('_currentLocation'),
-  //         position: currentLocation!,
-  //         infoWindow: const InfoWindow(
-  //           title: 'Your Location',
-  //         ),
-  //       ),
-  //     ];
-
-  //     final GoogleMapController controller = await _mapCompleter.future;
-  //     controller.animateCamera(
-  //       CameraUpdate.newCameraPosition(
-  //         CameraPosition(
-  //           target: currentLocation!,
-  //           zoom: 14.0,
-  //         ),
-  //       ),
-  //     );
-
-  //     List<Placemark> placemarks = await placemarkFromCoordinates(
-  //       currentLocationData.latitude!,
-  //       currentLocationData.longitude!,
-  //     );
-  //     stAddress =
-  //         '${placemarks.last.name!}, ${placemarks.last.street!}, ${placemarks.last.locality!}, ${placemarks.last.administrativeArea!}, ${placemarks.last.country!}';
-  //   }
-  // }
 
   Future<void> selectedPlace(String place) async {
     List<Location> locations = await locationFromAddress(place);
@@ -203,7 +153,7 @@ class MapProvider with ChangeNotifier {
         locations.last.latitude, locations.last.longitude);
 
     stAddress =
-        '${placemarks.last.name!}, ${placemarks.last.street!}, ${placemarks.last.locality!}, ${placemarks.last.administrativeArea!}, ${placemarks.last.country!}';
+        '${placemarks.last.name!}, ${placemarks.last.locality!}, ${placemarks.last.administrativeArea!}, ${placemarks.last.country!}';
   }
 
   @override

@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:food_couriers/components/gradient_text.dart';
 import 'package:food_couriers/constants/colors/app_colors.dart';
 import 'package:food_couriers/constants/images/images.dart';
+import 'package:food_couriers/services/navigation_service.dart';
+import 'package:get_it/get_it.dart';
 
 class FinishOrderScreen extends StatefulWidget {
   const FinishOrderScreen({super.key});
@@ -11,7 +13,10 @@ class FinishOrderScreen extends StatefulWidget {
 }
 
 class _FinishOrderScreenState extends State<FinishOrderScreen> {
+  final GetIt _getIt = GetIt.instance;
   final _feedbackController = TextEditingController();
+
+  late NavigationService _navigationService;
 
   final _outlineInputBorder = OutlineInputBorder(
     borderRadius: BorderRadius.circular(7),
@@ -23,6 +28,12 @@ class _FinishOrderScreenState extends State<FinishOrderScreen> {
   int _rating = 0;
 
   @override
+  void initState() {
+    super.initState();
+    _navigationService = _getIt.get<NavigationService>();
+  }
+
+  @override
   void dispose() {
     _feedbackController.dispose();
     super.dispose();
@@ -32,7 +43,7 @@ class _FinishOrderScreenState extends State<FinishOrderScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: AppColors.white,
-      // resizeToAvoidBottomInset: false,
+      resizeToAvoidBottomInset: false,
       body: Stack(
         children: [
           SizedBox(
@@ -177,7 +188,9 @@ class _FinishOrderScreenState extends State<FinishOrderScreen> {
           const SizedBox(width: 15),
           Expanded(
             child: GestureDetector(
-              onTap: () {},
+              onTap: () {
+                _navigationService.goBack();
+              },
               child: Container(
                 padding: const EdgeInsets.symmetric(vertical: 20),
                 alignment: Alignment.center,
@@ -227,19 +240,22 @@ class _FinishOrderScreenState extends State<FinishOrderScreen> {
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: List.generate(5, (index) {
-        return IconButton(
-          icon: Icon(
-            Icons.star_rate_rounded,
-            size: 30,
-            color: index < _rating
-                ? const Color(0xFFFEAD1D)
-                : const Color(0xFFFEAD1D).withOpacity(0.3),
-          ),
-          onPressed: () {
+        return GestureDetector(
+          onTap: () {
             setState(() {
               _rating = index + 1;
             });
           },
+          child: SizedBox(
+            width: 45,
+            child: Icon(
+              Icons.star_rate_rounded,
+              size: 30,
+              color: index < _rating
+                  ? const Color(0xFFFEAD1D)
+                  : const Color(0xFFFEAD1D).withOpacity(0.3),
+            ),
+          ),
         );
       }),
     );

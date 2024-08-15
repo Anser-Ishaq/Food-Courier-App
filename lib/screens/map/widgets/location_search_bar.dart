@@ -27,7 +27,6 @@ class LocationSearchBar extends StatelessWidget {
             padding: const EdgeInsets.symmetric(horizontal: 30),
             decoration: BoxDecoration(
               gradient: AppColors.gradientSecondary,
-              // color: AppColors.red.withOpacity(0.3),
               borderRadius: BorderRadius.circular(7),
             ),
             child: Row(

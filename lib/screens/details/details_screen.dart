@@ -44,22 +44,42 @@ class _DetailsScreenState extends State<DetailsScreen> {
               child: CarouselView(
                 shrinkExtent: 60,
                 itemExtent: MediaQuery.of(context).size.height -
-                    MediaQuery.of(context).size.height * 0.12,
+                MediaQuery.of(context).size.height * 0.12,
                 padding: const EdgeInsets.all(10),
-                backgroundColor: Colors.blue.shade200,
                 itemSnapping: true,
                 scrollDirection: Axis.vertical,
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(10),
                 ),
                 children: [
-                  Image.asset(widget.foodItem.imageURL!),
-                  Image.asset(widget.foodItem.imageURL!),
-                  Image.asset(widget.foodItem.imageURL!),
-                  Image.asset(widget.foodItem.imageURL!),
-                  Image.asset(widget.foodItem.imageURL!),
-                  Image.asset(widget.foodItem.imageURL!),
-                  Image.asset(widget.foodItem.imageURL!),
+                  Image.asset(
+                    widget.foodItem.imageURL!,
+                    fit: BoxFit.contain,
+                  ),
+                  Image.asset(
+                    widget.foodItem.imageURL!,
+                    fit: BoxFit.contain,
+                  ),
+                  Image.asset(
+                    widget.foodItem.imageURL!,
+                    fit: BoxFit.contain,
+                  ),
+                  Image.asset(
+                    widget.foodItem.imageURL!,
+                    fit: BoxFit.contain,
+                  ),
+                  Image.asset(
+                    widget.foodItem.imageURL!,
+                    fit: BoxFit.contain,
+                  ),
+                  Image.asset(
+                    widget.foodItem.imageURL!,
+                    fit: BoxFit.contain,
+                  ),
+                  Image.asset(
+                    widget.foodItem.imageURL!,
+                    fit: BoxFit.contain,
+                  ),
                 ],
               ),
             ),

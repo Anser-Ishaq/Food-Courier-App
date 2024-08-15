@@ -39,4 +39,23 @@ class DatabaseService {
       return null;
     }
   }
+
+Future<void> updateUser({
+  required String uid,
+  String? newAddress,
+  double? newLongitude,
+  double? newLatitude,
+}) async {
+  try {
+    Map<String, dynamic> data = {};
+    if (newAddress != null) data['address'] = newAddress;
+    if (newLongitude != null) data['longitude'] = newLongitude;
+    if (newLatitude != null) data['latitude'] = newLatitude;
+
+    await _usersCollection.doc(uid).update(data);
+  } catch (e) {
+    if (kDebugMode) print("Error updating user: $e");
+  }
+}
+
 }

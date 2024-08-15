@@ -15,8 +15,15 @@ class BottomNavigationScreen extends StatefulWidget {
 }
 
 class _BottomNavigationScreenState extends State<BottomNavigationScreen> {
-  int _selectedIndex = 0, _previousIndex = 0;
+  int _selectedIndex = 0, _previousIndex = 0, _totalQuantity = 0;
   final List<FoodItem> _foodItemsInCart = [];
+
+  void _updateTotalQuantity() {
+    _totalQuantity = _foodItemsInCart.fold(
+      0,
+      (sum, item) => sum + (item.quantity ?? 0),
+    );
+  }
 
   void _onItemTapped(int index, {FoodItem? foodItem}) {
     setState(() {
@@ -34,6 +41,8 @@ class _BottomNavigationScreenState extends State<BottomNavigationScreen> {
       } else {
         _foodItemsInCart.add(foodItem);
       }
+
+      _updateTotalQuantity();
     }
   }
 
@@ -76,6 +85,7 @@ class _BottomNavigationScreenState extends State<BottomNavigationScreen> {
                 _onItemTapped(index);
               },
               foodItems: _foodItemsInCart,
+              onQuantityChanged: _updateTotalQuantity,
             ),
             ChatScreen(
               index: _previousIndex,
@@ -88,7 +98,7 @@ class _BottomNavigationScreenState extends State<BottomNavigationScreen> {
         ),
         bottomNavigationBar: AnimatedContainer(
           curve: Curves.easeInOut,
-          duration: const Duration(milliseconds: 900),
+          duration: const Duration(milliseconds: 500),
           height: _selectedIndex != 0 ? 0 : 80,
           padding: const EdgeInsets.symmetric(
             vertical: 15,
@@ -121,14 +131,14 @@ class _BottomNavigationScreenState extends State<BottomNavigationScreen> {
               fontWeight: FontWeight.w500,
               height: 15.72 / 12,
             ),
-            tabs: const [
-              GButton(
+            tabs: [
+              const GButton(
                 icon: Icons.home,
                 iconActiveColor: AppColors.primary,
                 iconColor: AppColors.secondary,
                 text: 'Home',
               ),
-              GButton(
+              const GButton(
                 icon: Icons.person,
                 iconActiveColor: AppColors.primary,
                 iconColor: AppColors.secondary,
@@ -139,8 +149,46 @@ class _BottomNavigationScreenState extends State<BottomNavigationScreen> {
                 iconActiveColor: AppColors.primary,
                 iconColor: AppColors.secondary,
                 text: 'Cart',
+                leading: Stack(
+                  children: [
+                    const Icon(
+                      Icons.shopping_cart,
+                      size: 30,
+                      color: AppColors.secondary,
+                    ),
+                    if (_totalQuantity > 0)
+                      Positioned(
+                        top: -2,
+                        right: 0,
+                        child: Container(
+                          padding: const EdgeInsets.all(2),
+                          alignment: Alignment.center,
+                          decoration: BoxDecoration(
+                            color: AppColors.primary,
+                            shape: BoxShape.circle,
+                            border: Border.all(
+                              color: AppColors.white,
+                              strokeAlign: BorderSide.strokeAlignCenter
+                            )
+                          ),
+                          constraints: const BoxConstraints(
+                            minWidth: 14,
+                            minHeight: 14,
+                          ),
+                          child: Text(
+                            '$_totalQuantity',
+                            style: const TextStyle(
+                              color: Colors.white,
+                              fontSize: 9,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                        ),
+                      ),
+                  ],
+                ),
               ),
-              GButton(
+              const GButton(
                 icon: Icons.chat,
                 iconActiveColor: AppColors.primary,
                 iconColor: AppColors.secondary,

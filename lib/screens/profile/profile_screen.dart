@@ -74,6 +74,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
             SafeArea(
               child: Column(
                 children: [
+                  const SizedBox(height: 10),
                   BackNotificationRow(
                     index: widget.index,
                     onTapBack: () async {

@@ -6,9 +6,13 @@ class LocationDetailsBox extends StatelessWidget {
   const LocationDetailsBox({
     super.key,
     required this.locationAddress,
+    this.isLoading = false,
+    required this.onTapSetLocation,
   });
 
   final String locationAddress;
+  final bool isLoading;
+  final VoidCallback onTapSetLocation;
 
   @override
   Widget build(BuildContext context) {
@@ -77,7 +81,8 @@ class LocationDetailsBox extends StatelessWidget {
           ),
           LocationButton(
             buttonText: 'Set Location',
-            onTap: () {},
+            isLoading: isLoading,
+            onTap: onTapSetLocation,
           ),
         ],
       ),

@@ -4,9 +4,12 @@ import 'package:food_couriers/constants/colors/app_colors.dart';
 import 'package:food_couriers/constants/images/images.dart';
 import 'package:food_couriers/constants/routes/routes.dart';
 import 'package:food_couriers/models/food_item.dart';
+import 'package:food_couriers/providers/auth_provider.dart';
+import 'package:food_couriers/providers/user_provider.dart';
 import 'package:food_couriers/screens/details/details_screen.dart';
 import 'package:food_couriers/services/navigation_service.dart';
 import 'package:get_it/get_it.dart';
+import 'package:provider/provider.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 
 import 'widgets/header.dart';
@@ -37,6 +40,7 @@ class _HomeScreenState extends State<HomeScreen> {
   final _offerCardController = PageController();
 
   late NavigationService _navigationService;
+  late AuthProvider _authProvider;
 
   int _selectedFilterIndex = 0;
   List<FoodItem> _filteredFoodItems = [];
@@ -189,6 +193,7 @@ class _HomeScreenState extends State<HomeScreen> {
   void initState() {
     super.initState();
     _navigationService = _getIt.get<NavigationService>();
+    _authProvider = Provider.of<AuthProvider>(context, listen: false);
     _filteredFoodItems =
         _foodItemsByType[_filterOptions[_selectedFilterIndex]]!;
   }
@@ -221,11 +226,18 @@ class _HomeScreenState extends State<HomeScreen> {
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
-                  Header(
-                    onTap: widget.onTapProfile,
-                    onTapLocation: () {
-                      _navigationService.pushNamed(Routes.location);
-                    },
+                  Consumer<UserProvider>(
+                    builder: (context, userProvider, child) {
+                      userProvider.fetchUser(userUid: _authProvider.user!.uid);
+                      final address = userProvider.currentUser?.address ?? 'Set Location....';
+                      return Header(
+                        onTap: widget.onTapProfile,
+                        address: address,
+                        onTapLocation: () {
+                          _navigationService.pushNamed(Routes.location);
+                        },
+                      );
+                    }
                   ),
                   CustomSearchBar(
                     textEditingController: _searchTextEditingController,
