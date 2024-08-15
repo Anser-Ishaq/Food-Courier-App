@@ -38,7 +38,10 @@ class _FinishOrderScreenState extends State<FinishOrderScreen> {
           SizedBox(
             width: MediaQuery.of(context).size.width,
             height: MediaQuery.of(context).size.height,
-            child: Image.asset(Images.splashPattern),
+            child: Image.asset(
+              Images.splashPattern,
+              fit: BoxFit.contain,
+            ),
           ),
           Positioned(
             top: MediaQuery.of(context).size.height * 0.274,
@@ -220,7 +223,7 @@ class _FinishOrderScreenState extends State<FinishOrderScreen> {
     );
   }
 
-    Widget _starRating() {
+  Widget _starRating() {
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: List.generate(5, (index) {
@@ -228,7 +231,9 @@ class _FinishOrderScreenState extends State<FinishOrderScreen> {
           icon: Icon(
             Icons.star_rate_rounded,
             size: 30,
-            color: index < _rating ? const Color(0xFFFEAD1D) : const Color(0xFFFEAD1D).withOpacity(0.3),
+            color: index < _rating
+                ? const Color(0xFFFEAD1D)
+                : const Color(0xFFFEAD1D).withOpacity(0.3),
           ),
           onPressed: () {
             setState(() {

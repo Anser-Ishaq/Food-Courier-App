@@ -23,7 +23,7 @@ class _BottomNavigationScreenState extends State<BottomNavigationScreen> {
       _previousIndex = _selectedIndex;
       _selectedIndex = index;
     });
-    
+
     if (foodItem != null) {
       final existingItemIndex =
           _foodItemsInCart.indexWhere((item) => item.fid == foodItem.fid);
@@ -43,103 +43,111 @@ class _BottomNavigationScreenState extends State<BottomNavigationScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: AppColors.white,
-      body: IndexedStack(
-        index: _selectedIndex,
-        children: [
-          HomeScreen(
-            onTapProfile: () {
-              _onItemTapped(1);
-            },
-            onTapAdd: (foodItem) {
-              _onItemTapped(2, foodItem: foodItem);
-            },
-          ),
-          ProfileScreen(
-            index: _previousIndex,
-            onTapBack: (index) {
-              _onItemTapped(index);
-            },
-            dismissKeyboard: _dismissKeyboard,
-          ),
-          CartScreen(
-            index: _previousIndex,
-            onTapBack: (index) {
-              _onItemTapped(index);
-            },
-            foodItems: _foodItemsInCart,
-          ),
-          ChatScreen(
-            index: _previousIndex,
-            onTapBack: (index) {
-              _onItemTapped(index);
-            },
-            dismissKeyboard: _dismissKeyboard,
-          ),
-        ],
-      ),
-      bottomNavigationBar: AnimatedContainer(
-        curve: Curves.easeInOut,
-        duration: const Duration(milliseconds: 900),
-        height: _selectedIndex != 0 ? 0 : 80,
-        padding: const EdgeInsets.symmetric(
-          vertical: 15,
-          horizontal: 21,
-        ),
-        decoration: const BoxDecoration(
-          color: AppColors.white,
-          borderRadius: BorderRadius.only(
-            topLeft: Radius.circular(22),
-            topRight: Radius.circular(22),
-          ),
-        ),
-        child: GNav(
-          selectedIndex: _selectedIndex,
-          onTabChange: (index) {
-            _onItemTapped(index);
-          },
-          backgroundColor: AppColors.white,
-          tabBackgroundColor: AppColors.secondary,
-          padding: const EdgeInsets.symmetric(
-            horizontal: 17,
-            vertical: 10,
-          ),
-          tabBorderRadius: 12,
-          gap: 13,
-          iconSize: 30,
-          textStyle: const TextStyle(
-            fontFamily: 'Poppins',
-            fontSize: 12,
-            fontWeight: FontWeight.w500,
-            height: 15.72 / 12,
-          ),
-          tabs: const [
-            GButton(
-              icon: Icons.home,
-              iconActiveColor: AppColors.primary,
-              iconColor: AppColors.secondary,
-              text: 'Home',
+    return PopScope(
+      canPop: _selectedIndex != 0 ? false : true,
+      onPopInvokedWithResult: (didPop, result) {
+        if (_selectedIndex != 0) {
+          _onItemTapped(0);
+        }
+      },
+      child: Scaffold(
+        backgroundColor: AppColors.white,
+        body: IndexedStack(
+          index: _selectedIndex,
+          children: [
+            HomeScreen(
+              onTapProfile: () {
+                _onItemTapped(1);
+              },
+              onTapAdd: (foodItem) {
+                _onItemTapped(2, foodItem: foodItem);
+              },
             ),
-            GButton(
-              icon: Icons.person,
-              iconActiveColor: AppColors.primary,
-              iconColor: AppColors.secondary,
-              text: 'Profile',
+            ProfileScreen(
+              index: _previousIndex,
+              onTapBack: (index) {
+                _onItemTapped(index);
+              },
+              dismissKeyboard: _dismissKeyboard,
             ),
-            GButton(
-              icon: Icons.shopping_cart,
-              iconActiveColor: AppColors.primary,
-              iconColor: AppColors.secondary,
-              text: 'Cart',
+            CartScreen(
+              index: _previousIndex,
+              onTapBack: (index) {
+                _onItemTapped(index);
+              },
+              foodItems: _foodItemsInCart,
             ),
-            GButton(
-              icon: Icons.chat,
-              iconActiveColor: AppColors.primary,
-              iconColor: AppColors.secondary,
-              text: 'Chat',
+            ChatScreen(
+              index: _previousIndex,
+              onTapBack: (index) {
+                _onItemTapped(index);
+              },
+              dismissKeyboard: _dismissKeyboard,
             ),
           ],
+        ),
+        bottomNavigationBar: AnimatedContainer(
+          curve: Curves.easeInOut,
+          duration: const Duration(milliseconds: 900),
+          height: _selectedIndex != 0 ? 0 : 80,
+          padding: const EdgeInsets.symmetric(
+            vertical: 15,
+            horizontal: 21,
+          ),
+          decoration: const BoxDecoration(
+            color: AppColors.white,
+            borderRadius: BorderRadius.only(
+              topLeft: Radius.circular(22),
+              topRight: Radius.circular(22),
+            ),
+          ),
+          child: GNav(
+            selectedIndex: _selectedIndex,
+            onTabChange: (index) {
+              _onItemTapped(index);
+            },
+            backgroundColor: AppColors.white,
+            tabBackgroundColor: AppColors.secondary,
+            padding: const EdgeInsets.symmetric(
+              horizontal: 17,
+              vertical: 10,
+            ),
+            tabBorderRadius: 12,
+            gap: 13,
+            iconSize: 30,
+            textStyle: const TextStyle(
+              fontFamily: 'Poppins',
+              fontSize: 12,
+              fontWeight: FontWeight.w500,
+              height: 15.72 / 12,
+            ),
+            tabs: const [
+              GButton(
+                icon: Icons.home,
+                iconActiveColor: AppColors.primary,
+                iconColor: AppColors.secondary,
+                text: 'Home',
+              ),
+              GButton(
+                icon: Icons.person,
+                iconActiveColor: AppColors.primary,
+                iconColor: AppColors.secondary,
+                text: 'Profile',
+              ),
+              GButton(
+                icon: Icons.shopping_cart,
+                iconActiveColor: AppColors.primary,
+                iconColor: AppColors.secondary,
+                text: 'Cart',
+              ),
+              GButton(
+                icon: Icons.chat,
+                iconActiveColor: AppColors.primary,
+                iconColor: AppColors.secondary,
+                text: 'Chat',
+              ),
+            ],
+          ),
         ),
       ),
     );

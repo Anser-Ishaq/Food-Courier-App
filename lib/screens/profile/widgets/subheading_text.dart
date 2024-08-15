@@ -12,7 +12,7 @@ class SubheadingText extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       width: MediaQuery.of(context).size.width,
-      margin: const EdgeInsets.only(top: 10, bottom: 3,),
+      margin: const EdgeInsets.only(top: 7, bottom: 3,),
       child: Text(
         text,
         style: const TextStyle(

@@ -101,86 +101,104 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       ),
                     ),
                   ),
+                  const SizedBox(height: 20),
                   Expanded(
-                    child: SingleChildScrollView(
+                    child: Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 24),
                       child: Column(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                         children: [
                           PfpBox(
                             imageURL: Images.person,
                             onTap: () {},
                           ),
-                          const SubheadingText(
-                            text: 'Personal Info',
+                          Column(
+                            children: [
+                              const SubheadingText(
+                                text: 'Personal Info',
+                              ),
+                              ListContainer(
+                                child: Column(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceEvenly,
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: [
+                                    ListItemRow(
+                                      label: const ListLabel(text: 'Your name'),
+                                      data: ListData(
+                                        textEditingController: _nameController,
+                                        readOnly: false,
+                                        keyboardType: TextInputType.name,
+                                      ),
+                                    ),
+                                    ListItemRow(
+                                      label:
+                                          const ListLabel(text: 'Occupation'),
+                                      data: ListData(
+                                        textEditingController:
+                                            _occupationController,
+                                        readOnly: false,
+                                        keyboardType: TextInputType.text,
+                                      ),
+                                    ),
+                                    ListItemRow(
+                                      label: const ListLabel(text: 'Employer'),
+                                      data: ListData(
+                                        textEditingController:
+                                            _employerController,
+                                        readOnly: false,
+                                        keyboardType: TextInputType.text,
+                                      ),
+                                    ),
+                                    // ListItemRow(
+                                    //   label: const ListLabel(text: 'Nigeria'),
+                                    //   data: SwitchButton(
+                                    //     onTap: (value) {
+                                    //       setState(() {
+                                    //         _switchValue = value;
+                                    //       });
+                                    //     },
+                                    //   ),
+                                    // ),
+                                  ],
+                                ),
+                              ),
+                            ],
                           ),
-                          ListContainer(
-                            child: Column(
-                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                              mainAxisSize: MainAxisSize.min,
-                              children: [
-                                ListItemRow(
-                                  label: const ListLabel(text: 'Your name'),
-                                  data: ListData(
-                                    textEditingController: _nameController,
-                                    readOnly: false,
-                                    keyboardType: TextInputType.name,
-                                  ),
+                          Column(
+                            children: [
+                              const SubheadingText(
+                                text: 'Contact Info',
+                              ),
+                              ListContainer(
+                                child: Column(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceEvenly,
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: [
+                                    ListItemRow(
+                                      label:
+                                          const ListLabel(text: 'Phone number'),
+                                      data: ListData(
+                                        textEditingController:
+                                            _numberController,
+                                        readOnly: false,
+                                        keyboardType: TextInputType.number,
+                                      ),
+                                    ),
+                                    ListItemRow(
+                                      label: const ListLabel(text: 'Email'),
+                                      data: ListData(
+                                        textEditingController: _emailController,
+                                        readOnly: true,
+                                        keyboardType:
+                                            TextInputType.emailAddress,
+                                      ),
+                                    ),
+                                  ],
                                 ),
-                                ListItemRow(
-                                  label: const ListLabel(text: 'Occupation'),
-                                  data: ListData(
-                                    textEditingController: _occupationController,
-                                    readOnly: false,
-                                    keyboardType: TextInputType.text,
-                                  ),
-                                ),
-                                ListItemRow(
-                                  label: const ListLabel(text: 'Employer'),
-                                  data: ListData(
-                                    textEditingController: _employerController,
-                                    readOnly: false,
-                                    keyboardType: TextInputType.text,
-                                  ),
-                                ),
-                                // ListItemRow(
-                                //   label: const ListLabel(text: 'Nigeria'),
-                                //   data: SwitchButton(
-                                //     onTap: (value) {
-                                //       setState(() {
-                                //         _switchValue = value;
-                                //       });
-                                //     },
-                                //   ),
-                                // ),
-                              ],
-                            ),
-                          ),
-                          const SubheadingText(
-                            text: 'Contact Info',
-                          ),
-                          ListContainer(
-                            child: Column(
-                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                              mainAxisSize: MainAxisSize.min,
-                              children: [
-                                ListItemRow(
-                                  label: const ListLabel(text: 'Phone number'),
-                                  data: ListData(
-                                    textEditingController: _numberController,
-                                    readOnly: false,
-                                    keyboardType: TextInputType.number,
-                                  ),
-                                ),
-                                ListItemRow(
-                                  label: const ListLabel(text: 'Email'),
-                                  data: ListData(
-                                    textEditingController: _emailController,
-                                    readOnly: true,
-                                    keyboardType: TextInputType.emailAddress,
-                                  ),
-                                ),
-                              ],
-                            ),
+                              ),
+                            ],
                           ),
                           CustomButton(
                             buttonText: 'Edit',
@@ -192,7 +210,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   ),
                 ],
               ),
-            )
+            ),
           ],
         ),
       ),
