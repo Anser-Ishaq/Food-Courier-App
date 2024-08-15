@@ -8,4 +8,5 @@ class Routes {
   static const String resetPassword = '/reset-password';
   static const String bottomNavigation = '/bottomNavigation';
   static const String location = '/map';
+  static const String finishOrder = '/finishOrder';
 }

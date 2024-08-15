@@ -305,6 +305,7 @@ class _HomeScreenState extends State<HomeScreen> {
                               builder: (context) => DetailsScreen(
                                 foodItem: _filteredFoodItems[index],
                                 onAddToCart: () {
+                                  _navigationService.goBack();
                                   widget.onTapAdd(_filteredFoodItems[index]);
                                 },
                               ),

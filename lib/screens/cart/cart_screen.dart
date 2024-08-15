@@ -5,6 +5,7 @@ import 'package:food_couriers/constants/images/images.dart';
 import 'package:food_couriers/models/food_item.dart';
 import 'package:food_couriers/screens/cart/widgets/food_item_box.dart';
 import 'package:food_couriers/screens/cart/widgets/payment_box.dart';
+import 'package:food_couriers/screens/finish_order/finish_order_screen.dart';
 
 class CartScreen extends StatefulWidget {
   const CartScreen({
@@ -115,7 +116,9 @@ class _CartScreenState extends State<CartScreen> {
                   subTotal: subTotal,
                   deliveryCharges: 20,
                   discount: 10,
-                  onTap: () {},
+                  onTap: () {
+                    Navigator.push(context, MaterialPageRoute(builder: (context) => const FinishOrderScreen()));
+                  },
                 ),
               ],
             ),

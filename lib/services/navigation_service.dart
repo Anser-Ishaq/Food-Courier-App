@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:food_couriers/constants/routes/routes.dart';
 import 'package:food_couriers/screens/auth/auth_screen.dart';
 import 'package:food_couriers/screens/bottom_navigation/bottom_navigation_screen.dart';
+import 'package:food_couriers/screens/finish_order/finish_order_screen.dart';
 import 'package:food_couriers/screens/map/map_screen.dart';
 import 'package:food_couriers/screens/onboarding/onboading_screen.dart';
 import 'package:food_couriers/screens/splash/splash_screen.dart';
@@ -16,6 +17,7 @@ class NavigationService {
     Routes.auth : (context) => const AuthScreen(),
     Routes.bottomNavigation : (context) => const BottomNavigationScreen(),
     Routes.location : (context) => const MapScreen(),
+    Routes.finishOrder : (context) => const FinishOrderScreen(),
   };
 
   GlobalKey<NavigatorState>? get navigatorKey => _navigatorKey;

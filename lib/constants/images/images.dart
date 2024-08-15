@@ -21,4 +21,6 @@ class Images {
 
   static const String chickenBurger = 'assets/images/chicken_burger.png';
   static const String cheseBurger = 'assets/images/chese_burger.png';
+
+  static const String starIcon = 'assets/illustrations/star_Icon.png';
 }

@@ -94,7 +94,7 @@ class _DetailsScreenState extends State<DetailsScreen> {
               rating: widget.foodItem.rating!,
               orderCount: widget.foodItem.orderCount ?? 0,
               description: widget.foodItem.description!,
-              onTapAddToCart: () {},
+              onTapAddToCart: widget.onAddToCart,
             ),
           ],
         ),
