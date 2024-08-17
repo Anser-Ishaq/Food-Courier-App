@@ -4,6 +4,7 @@ import 'package:food_couriers/services/alert_service.dart';
 import 'package:food_couriers/services/auth_service.dart';
 import 'package:food_couriers/services/database_service.dart';
 import 'package:food_couriers/services/navigation_service.dart';
+import 'package:food_couriers/services/stripe_service.dart';
 import 'package:get_it/get_it.dart';
 
 Future<void> setupFirebase() async {
@@ -23,6 +24,9 @@ Future<void> registerServices() async {
   );
   getIt.registerSingleton<DatabaseService>(
     DatabaseService(),
+  );
+  getIt.registerSingleton<StripeService>(
+    StripeService(),
   );
 }
 

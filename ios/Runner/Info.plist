@@ -49,6 +49,8 @@
 		<string>We use your location to provide better services.</string>
 		<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
 		<string>We need your location at all times to provide continuous services.</string>
+		<key>NSCameraUsageDescription</key>
+		<string>Scan your card to add it automatically</string>
 		<key>UIStatusBarHidden</key>
 		<false/>
 	</dict>

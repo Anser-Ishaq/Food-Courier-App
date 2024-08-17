@@ -1,11 +1,13 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:food_couriers/components/icon_button_box.dart';
 import 'package:food_couriers/constants/colors/app_colors.dart';
 import 'package:food_couriers/constants/images/images.dart';
 import 'package:food_couriers/models/food_item.dart';
+import 'package:food_couriers/providers/stripe_provider.dart';
 import 'package:food_couriers/screens/cart/widgets/food_item_box.dart';
 import 'package:food_couriers/screens/cart/widgets/payment_box.dart';
-import 'package:food_couriers/screens/finish_order/finish_order_screen.dart';
+import 'package:provider/provider.dart';
 
 class CartScreen extends StatefulWidget {
   const CartScreen({
@@ -43,6 +45,7 @@ class _CartScreenState extends State<CartScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final stripeProvider = Provider.of<StripeProvider>(context);
     double subTotal = _foodItems.fold(
         0, (sum, item) => sum + (item.price! * (item.quantity ?? 0)));
 
@@ -121,16 +124,37 @@ class _CartScreenState extends State<CartScreen> {
                   subTotal: subTotal,
                   deliveryCharges: 20,
                   discount: 10,
-                  onTap: () {
-                    Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => const FinishOrderScreen()));
+                  onTap: () async {
+                    try {
+                      await stripeProvider.makePayment(
+                        amount: (subTotal + 20 - 10).toInt(),
+                        currency: 'USD',
+                      );
+                      // Navigate to a new screen or show a success message
+                    } catch (e) {
+                      if (kDebugMode) print('Payment failed: $e');
+                    }
+                    // Navigator.push(
+                    //     context,
+                    //     MaterialPageRoute(
+                    //         builder: (context) => const FinishOrderScreen()));
                   },
                 ),
               ],
             ),
           ),
+          if (stripeProvider.isLoading)
+            Positioned.fill(
+              child: Container(
+                alignment: Alignment.center,
+                decoration: BoxDecoration(
+                  color: AppColors.black.withOpacity(0.1),
+                ),
+                child: const CircularProgressIndicator(
+                  valueColor: AlwaysStoppedAnimation<Color>(AppColors.primary),
+                ),
+              ),
+            ),
         ],
       ),
     );

@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:flutter_stripe/flutter_stripe.dart';
 import 'package:food_couriers/constants/routes/routes.dart';
 import 'package:food_couriers/providers/auth_provider.dart';
 import 'package:food_couriers/providers/map_provider.dart';
+import 'package:food_couriers/providers/stripe_provider.dart';
 import 'package:food_couriers/providers/user_provider.dart';
 import 'package:food_couriers/services/navigation_service.dart';
 import 'package:food_couriers/utils.dart';
@@ -19,6 +21,7 @@ void main() async {
 
 Future<void> setup() async {
   WidgetsFlutterBinding.ensureInitialized();
+  Stripe.publishableKey = dotenv.env['STRIPE_PUBLISHABLE_KEY']!;
   await setupFirebase();
   SystemChrome.setSystemUIOverlayStyle(
     const SystemUiOverlayStyle(
@@ -63,6 +66,7 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider(create: (_) => AuthProvider()),
         ChangeNotifierProvider(create: (_) => UserProvider()),
         ChangeNotifierProvider(create: (_) => MapProvider()),
+        ChangeNotifierProvider(create: (_) => StripeProvider()),
       ],
       child: MaterialApp(
         navigatorKey: _navigationService.navigatorKey,
